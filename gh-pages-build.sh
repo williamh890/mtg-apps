@@ -1,1 +1,1 @@
-ng build --output-path docs --base-href /crystalline-giant/
+ng build --output-path docs --base-href /mtg-apps/

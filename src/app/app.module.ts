@@ -12,10 +12,14 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { CrystallineGiantComponent } from './crystalline-giant/crystalline-giant.component';
+import { WatchfulRadstagComponent } from './watchful-radstag/watchful-radstag.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CrystallineGiantComponent,
+    WatchfulRadstagComponent
   ],
   imports: [
     BrowserModule,

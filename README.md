@@ -1,6 +1,6 @@
-https://williamh890.github.io/crystalline-giant/
+https://williamh890.github.io/mtg-apps/
 
-# CystallineGiant
+# MTG Apps
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.7.
 

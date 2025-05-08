@@ -11,15 +11,8 @@
       @for (keyword of filteredKeywords(); track keyword; let isLast = $last) {
       @if (keyword.count > 0) {
       <div style="font-weight: 500;">
-        {{ keyword.name }}
-
-        @if (keyword.count > 1) {
-        ({{ keyword.count }})
-        }
-
-        @if (isLast) {
-        <span>,&#8200;</span>
-        }
+        {{ keyword.name }}@if (keyword.count > 1) {
+        ({{ keyword.count }})}@if (!isLast){<span>,&#8200;</span> }
       </div>
       }
       }

@@ -1,10 +1,21 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, ViewEncapsulation, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
+import { RouterModule } from '@angular/router';
+
 import { Observable, timer } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { COUNTERS } from '../counters';
+import { CommonModule } from '@angular/common';
 
 const KEYWORDS: string[] = [
   'flying',
@@ -28,6 +39,19 @@ interface Counter {
   selector: 'app-crystalline-giant',
   templateUrl: './crystalline-giant.component.html',
   styleUrls: ['./crystalline-giant.component.scss'],
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatButtonModule,
+    MatAutocompleteModule,
+    CommonModule,
+  ],
   encapsulation: ViewEncapsulation.None,
 })
 export class CrystallineGiantComponent implements OnInit, AfterViewInit {

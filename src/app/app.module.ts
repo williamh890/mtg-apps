@@ -3,35 +3,34 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { CrystallineGiantComponent } from './crystalline-giant/crystalline-giant.component';
 import { WatchfulRadstagComponent } from './watchful-radstag/watchful-radstag.component';
+import { CardSelectorComponent } from './card-selector/card-selector.component';
+
+
+const appRoutes: Routes = [
+  { path: 'crystalline-giant', component: CrystallineGiantComponent },
+  { path: 'watchful-radstag', component: WatchfulRadstagComponent },
+  { path: '**', component: CardSelectorComponent },
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    CrystallineGiantComponent,
-    WatchfulRadstagComponent
   ],
   imports: [
+    RouterModule.forRoot(
+      appRoutes, { enableTracing: true }  // <-- debugging purposes only
+    ),
     BrowserModule,
     BrowserAnimationsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatInputModule,
-    MatFormFieldModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
+
+    CardSelectorComponent,
+    WatchfulRadstagComponent,
+    CrystallineGiantComponent,
   ],
   providers: [
     provideAnimations(),

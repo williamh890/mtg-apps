@@ -24,7 +24,6 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(
       appRoutes,  {
-        enableTracing: true, // DEBUG
         useHash: true,
       }
     ),

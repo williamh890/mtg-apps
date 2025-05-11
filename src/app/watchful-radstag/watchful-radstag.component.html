@@ -1,3 +1,42 @@
+@if(view == views.CardView) {
 <div class="imgbox">
 	<img #radstagImage (load)="onResize()" class="center-fit" src="assets/watchful-radstag.jpg" />
+	<button mat-raised-button color="primary" (click)="onSetView(views.CreatureETBView)">Create ETB</button>
 </div>
+}
+
+@else if(view == views.CreatureETBView) {
+<button mat-icon-button (click)="onSetView(views.CardView)">
+    <mat-icon>close</mat-icon>
+</button>
+
+<div>
+<mat-form-field>
+	<mat-label>Power</mat-label>
+	<input matInput type="number" min='0' [(ngModel)]="etbCreaturePower">
+</mat-form-field>
+
+<button mat-button [matMenuTriggerFor]="powerMenu">Power</button>
+<mat-menu #powerMenu="matMenu">
+	@for (val of defaultValues; track val) {
+	<button (click)="etbCreaturePower = val" mat-menu-item>{{ val }}</button>
+	}
+</mat-menu>
+</div>
+
+<div>
+<mat-form-field>
+	<mat-label>Toughness</mat-label>
+	<input matInput type="number" min='1' [(ngModel)]="etbCreatureToughness">
+</mat-form-field>
+
+<button mat-button [matMenuTriggerFor]="toughnessMenu">Toughness</button>
+<mat-menu #toughnessMenu="matMenu">
+	@for (val of defaultValues; track val) {
+	<button (click)="etbCreatureToughness = val" mat-menu-item>{{ val }}</button>
+	}
+</mat-menu>
+</div>
+
+<button mat-raised-button (click)="onCreatureETBClicked()" color="primary">Creature ETB</button>
+}

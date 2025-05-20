@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 
-import { Creature } from './watchful-radstag.model';
+import { CopyTrigger, Creature, CreatureEtbTrigger, EvolveTrigger, Trigger } from './watchful-radstag.model';
 
 enum RadstagViews {
   CardView,
@@ -39,14 +39,12 @@ export class WatchfulRadstagComponent implements OnInit {
   defaultValues = Array.from(Array(100).keys())
   etbCreaturePower = 1;
 
-  creatures: Creature[];
+  stags: { [id: string]: Creature };
 
   constructor() { }
 
   ngOnInit(): void {
-    this.creatures = [
-      this.defaultStag()
-    ]
+    this.resetStags();
   }
 
   @ViewChild('radstagImage') cardImage!: ElementRef;
@@ -70,28 +68,66 @@ export class WatchfulRadstagComponent implements OnInit {
   }
 
   onCreatureETBClicked(): void {
-    console.log(this.etbCreaturePower, this.etbCreatureToughness);
-
-    const etbCreature = {
+    const etbCreature: Creature = {
       power: this.etbCreaturePower,
       toughness: this.etbCreatureToughness,
       plusOneCounters: 0,
-      isStag: false,
     }
 
-    this.creatures
-      .forEach((stag, index) => {
-        if (stag.isStag && this.doesCreatureEvolve(stag, etbCreature)) {
-          console.log('evolving');
+    this.onCreatureETB({ creature: etbCreature, kind: "creatureEtbTrigger" });
+  }
 
-          this.creatures[index].plusOneCounters += 1;
+  onCreatureETB(etbTrigger: CreatureEtbTrigger): void {
+    this.magicEngine([etbTrigger]);
+  }
 
-          this.creatures.push({ ...stag, plusOneCounters: 0});
-          console.log(this.creatures);
+  magicEngine(triggers: Trigger[]) {
+    while (triggers.length > 0) {
+      const trigger = <Trigger>triggers.pop();
+      console.log(trigger, triggers);
+
+      switch (trigger.kind) {
+        case 'creatureEtbTrigger': {
+          const newEvolveTriggers = this.getEvolveTriggersFromStags(this.stags, trigger);
+
+          triggers = [
+            ...triggers, ...newEvolveTriggers
+          ]
+          break;
         }
-      })
+        case 'evolveTrigger': {
+          const stag = this.stags[trigger.stagId];
+          stag.plusOneCounters += 1;
 
-    this.view = this.views.CardView;
+          triggers.push(<CopyTrigger>{ kind: 'copyTrigger', stagId: trigger.stagId });
+          break;
+        }
+        case 'copyTrigger': {
+          const newStag = {
+            ...this.stags[trigger.stagId],
+          };
+          newStag.plusOneCounters = 0;
+
+          const newEvolveTriggers = this.getEvolveTriggersFromStags(this.stags, {
+            kind: 'creatureEtbTrigger', creature: newStag
+          });
+
+          triggers = [
+            ...triggers, ...newEvolveTriggers
+          ]
+
+          this.stags[this.makeId()] = newStag;
+          break;
+        }
+      }
+    }
+  }
+
+  getEvolveTriggersFromStags(stags: { [id: string]: Creature }, trigger: CreatureEtbTrigger): EvolveTrigger[] {
+    return Object.entries(stags)
+      .filter(([_, stag]) => this.doesCreatureEvolve(stag, trigger.creature))
+      .map(([stagId, _]) => (<EvolveTrigger>{ stagId, kind: 'evolveTrigger' }));
+
   }
 
   doesCreatureEvolve(evolveCreature: Creature, etbCreature: Creature): boolean {
@@ -107,12 +143,23 @@ export class WatchfulRadstagComponent implements OnInit {
     return creature.toughness + creature.plusOneCounters;
   }
 
+  resetStags() {
+    const stagId = this.makeId();
+
+    this.stags = {
+      [stagId]: this.defaultStag()
+    };
+  }
+
   defaultStag(): Creature {
     return {
       power: 2,
       toughness: 2,
       plusOneCounters: 0,
-      isStag: true,
     };
+  }
+
+  makeId() {
+    return crypto.randomUUID();
   }
 }
